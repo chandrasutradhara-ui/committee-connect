@@ -2,7 +2,6 @@ import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { Infer, v } from "convex/values";
 
-// default user roles. can add / remove based on the project as needed
 export const ROLES = {
   ADMIN: "admin",
   USER: "user",
@@ -18,24 +17,74 @@ export type Role = Infer<typeof roleValidator>;
 
 const schema = defineSchema(
   {
-    // default auth tables using convex auth.
-    ...authTables, // do not remove or modify
+    ...authTables,
 
-    // the users table is the default users table that is brought in by the authTables
     users: defineTable({
-      name: v.optional(v.string()), // name of the user. do not remove
-      image: v.optional(v.string()), // image of the user. do not remove
-      email: v.optional(v.string()), // email of the user. do not remove
-      emailVerificationTime: v.optional(v.number()), // email verification time. do not remove
-      isAnonymous: v.optional(v.boolean()), // is the user anonymous. do not remove
-
-      role: v.optional(roleValidator), // role of the user. do not remove
-
+      name: v.optional(v.string()),
+      image: v.optional(v.string()),
+      email: v.optional(v.string()),
+      emailVerificationTime: v.optional(v.number()),
+      isAnonymous: v.optional(v.boolean()),
+      role: v.optional(roleValidator),
       online: v.optional(v.boolean()),
       lastSeen: v.optional(v.number()),
     })
       .index("email", ["email"])
       .index("by_online", ["online"]),
+
+    // Catalog items
+    items: defineTable({
+      ownerId: v.string(),
+      title: v.string(),
+      description: v.string(),
+      category: v.string(),
+      price: v.number(),
+      imageUrl: v.optional(v.string()),
+      tags: v.array(v.string()),
+      status: v.union(
+        v.literal("draft"),
+        v.literal("active"),
+        v.literal("archived"),
+      ),
+      createdAt: v.number(),
+      updatedAt: v.number(),
+    })
+      .index("by_owner", ["ownerId", "status"])
+      .index("by_category", ["category", "status"])
+      .index("by_status", ["status", "createdAt"]),
+
+    // Bookings / scheduled sessions
+    bookings: defineTable({
+      itemId: v.string(),
+      bookerId: v.string(),
+      ownerId: v.string(),
+      startTime: v.number(),
+      endTime: v.number(),
+      status: v.union(
+        v.literal("pending"),
+        v.literal("confirmed"),
+        v.literal("cancelled"),
+        v.literal("completed"),
+      ),
+      paymentStatus: v.union(
+        v.literal("unpaid"),
+        v.literal("paid"),
+        v.literal("refunded"),
+      ),
+      amount: v.number(),
+      createdAt: v.number(),
+    })
+      .index("by_item", ["itemId", "status"])
+      .index("by_booker", ["bookerId", "status"])
+      .index("by_owner", ["ownerId", "status"]),
+
+    // Comments on items
+    comments: defineTable({
+      itemId: v.string(),
+      authorId: v.string(),
+      content: v.string(),
+      createdAt: v.number(),
+    }).index("by_item", ["itemId", "createdAt"]),
 
     calls: defineTable({
       callerId: v.string(),

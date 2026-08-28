@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/input-otp";
 
 import { useAuth } from "@/hooks/use-auth";
-import logo from "@/assets/logo.svg";
 import { ArrowRight, Loader2, Mail, UserX } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
@@ -121,14 +120,12 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             <>
               <CardHeader className="text-center">
               <div className="flex justify-center">
-                    <img
-                      src={logo}
-                      alt="Lock Icon"
-                      width={64}
-                      height={64}
-                      className="rounded-lg mb-4 mt-4 cursor-pointer"
+                    <div
+                      className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center font-bold text-lg text-primary-foreground mb-4 mt-4 cursor-pointer"
                       onClick={() => navigate("/")}
-                    />
+                    >
+                      M
+                    </div>
                   </div>
                 <CardTitle className="text-xl">Get Started</CardTitle>
                 <CardDescription>
@@ -278,15 +275,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           )}
 
           <div className="py-4 px-6 text-xs text-center text-muted-foreground bg-muted border-t rounded-b-lg">
-            Secured by{" "}
-            <a
-              href="https://freebuff.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-primary transition-colors"
-            >
-              freebuff.com
-            </a>
+            Secured by MAga
           </div>
         </Card>
         </div>
