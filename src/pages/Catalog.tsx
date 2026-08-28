@@ -2,13 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
-import {
-  ArrowLeft,
-  MessageCircle,
-  Package,
-  Search,
-  Video,
-} from "lucide-react";
+import { ArrowLeft, Package, Search } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
